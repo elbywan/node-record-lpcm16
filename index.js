@@ -17,7 +17,8 @@ exports.start = function (options) {
     thresholdEnd: null,
     silence: '1.0',
     verbose: false,
-    recordProgram: 'rec'
+    recordProgram: 'rec',
+    format: 'waveaudio'
   }
 
   options = Object.assign(defaults, options)
@@ -31,13 +32,13 @@ exports.start = function (options) {
       var cmd = 'sox';
       var cmdArgs = [
         '-q',                     // show no progress
-        '-t', 'waveaudio',        // audio type
+        '-t', options.format,     // audio type
         '-d',                     // use default recording device
         '-r', options.sampleRate, // sample rate
         '-c', options.channels,   // channels
         '-e', 'signed-integer',   // sample encoding
         '-b', '16',               // precision (bits)
-        '-',                      // pipe
+        '-p',                     // pipe
         // end on silence
         'silence', '1', '0.1', options.thresholdStart || options.threshold + '%',
         '1', options.silence, options.thresholdEnd || options.threshold + '%'
